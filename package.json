@@ -1,0 +1,30 @@
+{
+  "name": "use-mounted-async",
+  "version": "1.0.0",
+  "description": "React hook which allows to run async action callbacks (succes, error, always) only while component is mounted",
+  "main": "src/use-async-mounted.hook.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/thenoiro/use-async-mounted.hook.git"
+  },
+  "keywords": [
+    "react",
+    "hooks",
+    "use",
+    "async",
+    "mounted"
+  ],
+  "author": "Bohdan Chernovol <noiro.bogdan@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/thenoiro/use-async-mounted.hook/issues"
+  },
+  "homepage": "https://github.com/thenoiro/use-async-mounted.hook#readme",
+  "peerDependencies": {
+    "react": "^16.0.1",
+    "react-dom": "^16.0.1"
+  }
+}
