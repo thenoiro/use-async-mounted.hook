@@ -2,7 +2,7 @@
 
 ```jsx
 import React, { useState } from 'react';
-import useAsyncMounted from 'use-async-mounted';
+import useMountedAsync from 'use-async-mounted';
 
 /**
  * [compute] function call takes around 5 seconds.
@@ -28,10 +28,10 @@ const SomeComponent = ({ compute, onCompute }) => {
   };
 
   /**
-   * useAsyncMounted hook takes a function, which should return [null] or async function
+   * useMountedAsync hook takes a function, which should return [null] or async function
    * (Promise-like) call. Given function will be invoked synchronously.
    */
-  useAsyncMounted((callbacks) => {
+  useMountedAsync((callbacks) => {
     /**
      * [callbacks] object contains three callback functions: [success], [error], and [always].
      * Each function will accept another callback, wich will be invoked only in case component
