@@ -31,6 +31,9 @@ const useMountedAsync = (cb) => {
         }
         const data = await asyncFunction;
 
+        if (data instanceof Error) {
+          throw data;
+        }
         if (typeof successCallback === 'function' && isMounted) {
           successCallback(data);
         }

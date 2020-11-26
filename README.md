@@ -2,7 +2,7 @@
 
 ```jsx
 import React, { useState } from 'react';
-import useMountedAsync from 'use-async-mounted';
+import useMountedAsync from 'use-mounted-async';
 
 /**
  * [compute] function call takes around 5 seconds.
