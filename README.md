@@ -35,13 +35,14 @@ const SomeComponent = ({ compute, onCompute }) => {
     /**
      * [callbacks] object contains three callback functions: [success], [error], and [always].
      * Each function will accept another callback, wich will be invoked only in case component
-     * still mounted.
+     * still mounted. [always] callback will be invoked before [success] and [error].
      */
-    const { success, error, always } = callbacks;
+    const { always, success, error } = callbacks;
 
     if (!loading) {
       /**
-       * You can return [null|undefined|false] if there is no need to do any async calls.
+       * You can return [null|undefined|false] if there is no need to do any async calls. The best
+       * place where to change this condition back - [always] callback.
        */
       return null;
     }
@@ -49,6 +50,14 @@ const SomeComponent = ({ compute, onCompute }) => {
     /**
      * These callbacks will be invoked only in case component still mounted
      */
+    always((result) => {
+      /**
+       * Always (before [success] or [error]). [result] equals true in case of success.
+       * This is the place where you should to change the condition, which fire the hook to avoid
+       * secondary call.
+       */
+      setLoading(false);
+    });
     success((data) => {
       // In case of succes
       onCompute(data);
@@ -56,10 +65,6 @@ const SomeComponent = ({ compute, onCompute }) => {
     error((ex) => {
       // In case of error
       console.error(ex);
-    });
-    always(() => {
-      // Always (after success or error)
-      setLoading(false);
     });
 
     /**

@@ -19,9 +19,9 @@ const useMountedAsync = (cb) => {
     const handleFunction = async () => {
       try {
         const asyncFunction = cb({
+          always: handleAlways,
           success: handleSuccess,
           error: handleError,
-          always: handleAlways,
         });
         if (!asyncFunction) {
           return;
@@ -35,15 +35,18 @@ const useMountedAsync = (cb) => {
           throw data;
         }
         if (typeof successCallback === 'function' && isMounted) {
+          if (typeof alwaysCallback === 'function') {
+            alwaysCallback(true);
+          }
           successCallback(data);
         }
       } catch (ex) {
         if (typeof errorCallback === 'function' && isMounted) {
+          if (typeof alwaysCallback === 'function') {
+            alwaysCallback(false);
+          }
           errorCallback(ex);
         }
-      }
-      if (typeof alwaysCallback === 'function' && isMounted) {
-        alwaysCallback();
       }
     };
     handleFunction();
