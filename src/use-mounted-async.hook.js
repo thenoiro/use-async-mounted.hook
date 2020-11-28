@@ -1,6 +1,10 @@
-import { useEffect } from 'react';
+import { useEffect, useCallback } from 'react';
 
-const useMountedAsync = (cb) => {
+const useMountedAsync = (hookCallback, deps = null) => {
+  const dependencies = Array.isArray(deps) ? deps : [];
+  const dependedCallback = useCallback(hookCallback, dependencies);
+  const cb = Array.isArray(deps) ? dependedCallback : hookCallback;
+
   useEffect(() => {
     let isMounted = true;
     let successCallback = null;
