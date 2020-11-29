@@ -125,7 +125,7 @@ useMountedAsync(({ always, success, error, finally }) => {
     finally(() => {
         // Will be invoked after [success] or [error] callbacks with no arguments.
         ...
-    })
+    });
     ...
 });
 ```
