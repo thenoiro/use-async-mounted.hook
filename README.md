@@ -53,7 +53,7 @@ const RegisterPage = ({ onRegisterSuccess }) => {
     );
 }
 ```
-Using **`useMountedAsync`** hook this code can be rewrited to avoid such problem:
+Using **`useMountedAsync`** hook this code could be rewrited to avoid such problem:
 ```jsx
 import React, { useState } from 'react';
 import useMountedAsync from 'use-mounted-async';
@@ -100,27 +100,32 @@ const RegisterPage = ({ onRegisterSuccess }) => {
 ```
 
 ## Callbacks:
-**`useMountedAsync`** hook takes your function wich will be invoked with **`callbacks`** object. This object contains 3 functions:
-+ **`callbacks.always`**
-+ **`callbacks.success`**
-+ **`callbacks.error`**
-
-These functions take your callback wich will be invoked after your async function call, and **only** in case component still mounted.
+**`useMountedAsync`** hook takes your function wich will be invoked with **`callbacks`** object. This object contains 4 functions:
++ **`callbacks.always`** - Runs first (before **`success`**, **`error`** and **`always`** callbacks).
++ **`callbacks.success`** - Returns async function result.
++ **`callbacks.error`** - Returns async function exception, if it happened.
++ **`callbacks.finally`** - Runs after all callbacks without any arguments.
+These functions take your callback wich will be invoked after your async function call, and **only** in case component still mounted. They are not required. You can set up only callbacks you need.
 ```jsx
-useMountedAsync(({ always, success, error }) => {
+useMountedAsync(({ always, success, error, finally }) => {
     ...
-    always(() => {
-        // This one will be invoked first, before [success] and [error] callbacks
+    always((isSuccess) => {
+        // This one will be invoked first, before [success] and [error] callbacks.
+        // If [isSuccess] equals [true], means async function works without exceptions.
         ...
     });
     success((data) => {
-        // Will return your async function call result (if presented);
+        // Will return your async function call result (if presented).
         ...
     });
     error((ex) => {
-        // Will return your async function exception (if presented);
+        // Will return your async function exception (if presented).
         ...
     });
+    finally(() => {
+        // Will be invoked after [success] or [error] callbacks with no arguments.
+        ...
+    })
     ...
 });
 ```

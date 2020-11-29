@@ -7,9 +7,10 @@ const useMountedAsync = (hookCallback, deps = null) => {
 
   useEffect(() => {
     let isMounted = true;
+    let alwaysCallback = null;
     let successCallback = null;
     let errorCallback = null;
-    let alwaysCallback = null;
+    let finallyCallback = null;
 
     const handleSuccess = (scb) => {
       successCallback = scb;
@@ -20,12 +21,21 @@ const useMountedAsync = (hookCallback, deps = null) => {
     const handleAlways = (acb) => {
       alwaysCallback = acb;
     };
+    const handleFinally = (fcb) => {
+      finallyCallback = fcb;
+    };
+    const runCallback = (fn, ...args) => {
+      if (typeof fn === 'function') {
+        fn(...args);
+      }
+    };
     const handleFunction = async () => {
       try {
         const asyncFunction = cb({
           always: handleAlways,
           success: handleSuccess,
           error: handleError,
+          finally: handleFinally,
         });
         if (!asyncFunction) {
           return;
@@ -38,18 +48,16 @@ const useMountedAsync = (hookCallback, deps = null) => {
         if (data instanceof Error) {
           throw data;
         }
-        if (typeof successCallback === 'function' && isMounted) {
-          if (typeof alwaysCallback === 'function') {
-            alwaysCallback(true);
-          }
-          successCallback(data);
+        if (isMounted) {
+          runCallback(alwaysCallback, true);
+          runCallback(successCallback, data);
+          runCallback(finallyCallback);
         }
       } catch (ex) {
-        if (typeof errorCallback === 'function' && isMounted) {
-          if (typeof alwaysCallback === 'function') {
-            alwaysCallback(false);
-          }
-          errorCallback(ex);
+        if (isMounted) {
+          runCallback(alwaysCallback, false);
+          runCallback(errorCallback, ex);
+          runCallback(finallyCallback);
         }
       }
     };
