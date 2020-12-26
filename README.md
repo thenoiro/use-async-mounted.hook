@@ -74,16 +74,11 @@ const RegisterPage = ({ onRegisterSuccess }) => {
             // No any formData to send. Do not run http call.
             return null;
         }
-        callbacks.always(() => {
-            setFormData(null); 
-        });
-        callbacks.success((result) => {
-            onRegisterSuccess(result);
-        });
-        callbacks.error((ex) => {
-            console.error(ex);
-        });
-        
+        callbacks
+            .always(() => setFormData(null));
+            .success((result) => onRegisterSuccess(result))
+            .error((ex) => console.error(ex));
+
         // This is the place where you have to return your async function call.
         // According to specification async function call always returns instance of Promise.
         return http.post(registerUrl, formData);
@@ -107,10 +102,12 @@ const RegisterPage = ({ onRegisterSuccess }) => {
 + **`callbacks.finally`** - Runs after all callbacks without any arguments.
 These functions take your callback wich will be invoked after your async function call, and **only** in case component still mounted. They are not required. You can set up only callbacks you need.
 ```jsx
-useMountedAsync(({ always, success, error, finally }) => {
+useMountedAsync((callbacks) => {
     ...
+    const { always, success, error, finally } = callbacks;
+
     always((isSuccess) => {
-        // This one will be invoked first, before [success] and [error] callbacks.
+        // This one will be invoked first, before [success], [error] and [finally] callbacks.
         // If [isSuccess] equals [true], means async function works without exceptions.
         ...
     });
@@ -123,11 +120,19 @@ useMountedAsync(({ always, success, error, finally }) => {
         ...
     });
     finally(() => {
-        // Will be invoked after [success] or [error] callbacks with no arguments.
+        // Will be invoked after [always] and [success] or [error] callbacks with no arguments.
         ...
     });
     ...
 });
+```
+Each callback returns **`callbacks`** object, so you can chain your calls like:
+```jsx
+    callbacks
+        .allways(/* code */)
+        .success(/* code */)
+        .error(/* code */)
+        .finally(/* code */);
 ```
 
 ## Dependencies

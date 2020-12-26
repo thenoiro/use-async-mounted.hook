@@ -31,12 +31,26 @@ const useMountedAsync = (hookCallback, deps = null) => {
     };
     const handleFunction = async () => {
       try {
-        const asyncFunction = cb({
-          always: handleAlways,
-          success: handleSuccess,
-          error: handleError,
-          finally: handleFinally,
-        });
+        const callbacks = {
+          always: (...args) => {
+            handleAlways(...args);
+            return callbacks;
+          },
+          success: (...args) => {
+            handleSuccess(...args);
+            return callbacks;
+          },
+          error: (...args) => {
+            handleError(...args);
+            return callbacks;
+          },
+          finally: (...args) => {
+            handleFinally(...args);
+            return callbacks;
+          },
+        };
+        const asyncFunction = cb(callbacks);
+
         if (!asyncFunction) {
           return;
         }

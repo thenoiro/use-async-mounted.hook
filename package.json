@@ -1,6 +1,6 @@
 {
   "name": "use-mounted-async",
-  "version": "1.3.0",
+  "version": "1.4.0",
   "description": "React hook which allows to run async action callbacks (succes, error, always) only in case component still mounted",
   "main": "src/use-mounted-async.hook.js",
   "scripts": {
