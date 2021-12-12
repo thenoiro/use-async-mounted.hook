@@ -129,7 +129,7 @@ useMountedAsync((callbacks) => {
 Each callback returns **`callbacks`** object, so you can chain your calls like:
 ```jsx
     callbacks
-        .allways(/* code */)
+        .always(/* code */)
         .success(/* code */)
         .error(/* code */)
         .finally(/* code */);
